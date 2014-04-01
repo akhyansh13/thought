@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Thought #{{thought_id}}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <!-- <link href="{% static 'css/bootstrap-fluid-adj.css' %}" rel="stylesheet"> -->
+    <link href="{% static 'css/bootstrap.min.css'% }" rel="stylesheet" media="screen">
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-inverse" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Port.</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<h1>Thought #{{thought_id}}</h1>
+<div class="jumbotron">
+  
+  <h2>{{thought.thought}}</h2>
+  <!-- <p>...</p> -->
+  <!-- <p><a class="btn btn-primary btn-lg" role="button">Learn more</a></p> -->
+</div>
+{% for comment in thought.comment_set.all %}
+<div class="panel panel-default">
+  <div class="panel-body">
+  <ul><div align="left">{{comment.comment}}</div>
+  <div align="right"><a href="/port/{{thought_id}}/chain/{{comment.id}}/">Chain sub-thought #{{comment.id}} --></a></a></div>
+  </ul>
+  </div></div>
+{% endfor %}
+<div align="center" class="form-group">
+<form role="form" method="post" action="/port/{{thought_id}}/add_comment/">
+{% csrf_token %}
+            {% for field in form.visible_fields %}
+                {{ field.errors }}
+                {{ field }}
+            {% endfor %}
+</div>
+<div align="center">
+<button type="submit" class="btn btn-warning btn-lg">Add Sub-Thought</button>
+</div>
+</form> 
+</body>
+<script src="{% static 'js/jquery-2.1.0.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+</html>
