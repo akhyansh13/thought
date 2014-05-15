@@ -1,63 +1,24 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-<title>Thought #{{thought_id}}</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    <!-- <link href="{% static 'css/bootstrap-fluid-adj.css' %}" rel="stylesheet"> -->
-    <link href="{% static 'css/bootstrap.min.css'% }" rel="stylesheet" media="screen">
-    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
-</head>
-<body>
-<nav class="navbar navbar-inverse" role="navigation">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Port.</a>
-    </div>
-
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        </li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-<h1>Thought #{{thought_id}}</h1>
-<div class="jumbotron">
-  
-  <h2>{{thought.thought}}</h2>
-  <!-- <p>...</p> -->
-  <!-- <p><a class="btn btn-primary btn-lg" role="button">Learn more</a></p> -->
+{% extends 'Port/base.html' %}
+{% block body_block %}
+<div class="jumbotron"><h2>Have discussions anonymously, and whenever you think your thought is important and there has to be more discussion about it, just chain it! Never lose any thoughts.</h2></br>
+<h4>Just specify your handle(/your_name) with every thought and you are good to go!</h4>
 </div>
-{% for comment in thought.comment_set.all %}
-<div class="panel panel-default">
-  <div class="panel-body">
-  <ul><div align="left">{{comment.comment}}</div>
-  <div align="right"><a href="/port/{{thought_id}}/chain/{{comment.id}}/">Chain sub-thought #{{comment.id}} --></a></a></div>
-  </ul>
-  </div></div>
-{% endfor %}
 <div align="center" class="form-group">
-<form role="form" method="post" action="/port/{{thought_id}}/add_comment/">
+<form role="form" method="post" action="/port/">
 {% csrf_token %}
             {% for field in form.visible_fields %}
                 {{ field.errors }}
                 {{ field }}
             {% endfor %}
 </div>
-<div align="center">
-<button type="submit" class="btn btn-warning btn-lg">Add Sub-Thought</button>
+<div align="center" style="padding-bottom:20px">
+<button type="submit" class="btn btn-warning btn-lg">Add Thought</button>
 </div>
-</form> 
-</body>
-<script src="{% static 'js/jquery-2.1.0.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-</html>
+</form>
+<h3>Recent Thoughts:</h3>
+{% for thought in thought_list %}
+{% if thought.parent == null %}
+<h3><a href='/port/{{thought.id}}/'><ul>{{thought.thought}}</ul></a></h3>
+{% endif %}
+{% endfor %}
+{% endblock %}

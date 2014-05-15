@@ -1,0 +1,43 @@
+{% extends 'Port/base.html' %}
+{% block title_block %}Thought #{{ thought_id }}{% endblock %}
+{% block body_block %}
+<div style="margin-left:40px; margin-right:40px">
+<h1>#{{thought_id}}</h1>
+<div class="jumbotron">
+
+  <h2>{{thought.thought}}</h2>
+  <!-- <p>...</p> -->
+  <!-- <p><a class="btn btn-primary btn-lg" role="button">Learn more</a></p> -->
+</div>
+{% for comment in thought.comment_set.all %}
+<div class="panel panel-default">
+  <div class="panel-body">
+  <ul><div align="left" font-size:32pt>{{comment.comment}}</div>
+  <div align="right"><a href="/port/{{thought_id}}/chain/{{comment.id}}/"> Chain!</a></a></div>
+  </ul>
+  </div></div>
+{% endfor %}
+<div align="center" class="form-group">
+<form role="form" method="post" action="/port/{{thought_id}}/add_comment/">
+{% csrf_token %}
+            {% for field in form.visible_fields %}
+                {{ field.errors }}
+                {{ field }}
+            {% endfor %}
+</div>
+<div align="center" style="padding-bottom:20px">
+<button type="submit" class="btn btn-warning btn-lg">Add Sub-Thought</button>
+</div>
+</form>
+<div class="panel panel-default">
+<div class="panel-body">
+{% if child_thoughts %}
+<h2>Know more. Follow these important sub-thoughts, that have been chained previously, to read more discussions.</h2>
+{% for child in child_thoughts %}
+<h4><a href='/port/{{child.id}}/'><ul>{{child.thought}}</ul></h4></a>
+{% endfor %}
+{% endif %}
+</div>
+</div>
+</div>
+{% endblock %}
